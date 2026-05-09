@@ -1,0 +1,2096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tee Ouan Packaging</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --pink: #ff69b4; --pink-dark: #d4006e; --pink-mid: #e0459a;
+      --pink-light: #ffe0f0; --cream: #fefce8; --bg: #f5f7ee;
+      --white: #ffffff; --text: #2d2d2d; --text-muted: #6b6b6b;
+      --shadow: 0 4px 24px rgba(0,0,0,0.07);
+      --shadow-hover: 0 8px 36px rgba(255,105,180,0.18);
+      --radius: 20px; --teal: #0097a7; --green: #43a047; --purple: #7b2fa2;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ─── NAV ─── */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 56px; background: var(--white);
+      border-bottom: 1px solid #f0e0ea;
+      position: sticky; top: 0; z-index: 400;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1.2rem;
+      color: var(--pink); cursor: pointer; flex-shrink: 0;
+    }
+    .nav-links { display: flex; gap: 4px; list-style: none; align-items: center; }
+    .nav-links li a {
+      display: flex; align-items: center; gap: 5px;
+      text-decoration: none; font-size: 0.88rem; font-weight: 500;
+      color: var(--text); padding: 8px 14px; border-radius: 50px;
+      transition: background 0.2s, color 0.2s; cursor: pointer; white-space: nowrap;
+    }
+    .nav-links li a.active { background: var(--pink-light); color: var(--pink-dark); font-weight: 600; }
+    .nav-links li a:hover:not(.active) { background: #f5f5f5; }
+    .cart-badge {
+      background: var(--pink); color: #fff; border-radius: 50%;
+      width: 18px; height: 18px; font-size: 0.65rem; font-weight: 800;
+      display: inline-flex; align-items: center; justify-content: center;
+      margin-left: 2px; flex-shrink: 0;
+    }
+
+    /* ─── PAGES ─── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ─── MODAL SYSTEM ─── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.55); z-index: 600;
+      align-items: flex-start; justify-content: center;
+      padding: 24px 16px; overflow-y: auto;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--white); border-radius: 24px; padding: 40px;
+      width: 100%; max-width: 560px; position: relative;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.22);
+      margin: auto;
+    }
+    .modal-box h2 {
+      font-family: 'Nunito', sans-serif; font-size: 1.65rem; font-weight: 900;
+      color: var(--pink-dark); margin-bottom: 6px;
+    }
+    .modal-subtitle { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 24px; }
+    .modal-close {
+      position: absolute; top: 18px; right: 22px;
+      background: #f5f5f5; border: none; border-radius: 50%;
+      width: 34px; height: 34px; font-size: 1.1rem; cursor: pointer;
+      color: var(--text-muted); display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .modal-close:hover { background: #eee; color: var(--text); }
+    .modal-divider { border: none; border-top: 1px solid #f0f0f0; margin: 20px 0; }
+
+    /* ─── FORM ELEMENTS ─── */
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block; font-size: 0.83rem; font-weight: 700;
+      color: var(--text); margin-bottom: 6px; letter-spacing: 0.02em;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%; padding: 11px 16px;
+      border: 2px solid #ebebeb; border-radius: 12px;
+      font-size: 0.9rem; font-family: 'Poppins', sans-serif;
+      color: var(--text); outline: none; transition: border-color 0.2s;
+      background: #fafafa;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--pink); background: #fff; }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    /* ─── BUTTONS ─── */
+    .btn-primary {
+      background: var(--pink); color: #fff; border: none; border-radius: 50px;
+      padding: 14px 32px; font-size: 1rem; font-weight: 700; cursor: pointer;
+      font-family: 'Poppins', sans-serif; transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: var(--pink-mid); transform: translateY(-2px); }
+    .btn-outline {
+      background: transparent; color: var(--pink); border: 2px solid var(--pink);
+      border-radius: 50px; padding: 12px 30px; font-size: 1rem; font-weight: 700;
+      cursor: pointer; font-family: 'Poppins', sans-serif; transition: background 0.2s, transform 0.15s;
+    }
+    .btn-outline:hover { background: var(--pink-light); transform: translateY(-2px); }
+    .btn-white {
+      background: var(--white); color: var(--pink); border: none; border-radius: 50px;
+      padding: 14px 32px; font-size: 1rem; font-weight: 700; cursor: pointer;
+      font-family: 'Poppins', sans-serif; transition: box-shadow 0.2s, transform 0.15s;
+    }
+    .btn-white:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); transform: translateY(-2px); }
+    .btn-purple {
+      background: #6d2e96; color: #fff; border: none; border-radius: 50px;
+      padding: 14px 32px; font-size: 1rem; font-weight: 700; cursor: pointer;
+      font-family: 'Poppins', sans-serif; transition: background 0.2s, transform 0.15s;
+    }
+    .btn-purple:hover { background: #5a1e7a; transform: translateY(-2px); }
+    .btn-full { width: 100%; }
+    .btn-green {
+      background: #43a047; color: #fff; border: none; border-radius: 50px;
+      padding: 14px 32px; font-size: 1rem; font-weight: 700; cursor: pointer;
+      font-family: 'Poppins', sans-serif; transition: background 0.2s, transform 0.15s;
+    }
+    .btn-green:hover { background: #388e3c; transform: translateY(-2px); }
+
+    /* ─── PRODUCT IMAGES ─── */
+    .product-img-fixed {
+      width: 100%; height: 220px;
+      background-size: cover; background-position: center;
+      background-repeat: no-repeat; background-color: #eee;
+    }
+    .img-box-a  { background-image: url('photoo/sizeA.JPG'); }
+    .img-box-b  { background-image: url('photoo/sizeB.JPG'); }
+    .img-bubble { background-image: url('photoo/Bubble Wrap.JPG'); }
+    .img-bags   { background-image: url('photoo/IMG_3754.JPG'); }
+    .img-eco    { background-image: url('photoo/IMG_3755.JPG'); }
+    .img-cont   { background-image: url('photoo/IMG_3757.JPG'); }
+
+    /* ─── PRODUCT CARDS ─── */
+    .products-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(290px,1fr));
+      gap: 28px; max-width: 1100px; margin: 0 auto;
+    }
+    .product-card {
+      background: var(--white); border-radius: var(--radius); overflow: hidden;
+      box-shadow: var(--shadow); transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .product-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-4px); }
+    .product-body { padding: 18px 20px 22px; }
+    .product-tag {
+      display: inline-block; background: var(--pink-light); color: var(--pink-dark);
+      font-size: 0.76rem; font-weight: 600; padding: 4px 12px;
+      border-radius: 50px; margin-bottom: 10px;
+    }
+    .product-name { font-family:'Nunito',sans-serif; font-size:1.15rem; font-weight:800; color:var(--text); margin-bottom:7px; }
+    .product-desc { font-size:0.86rem; color:var(--text-muted); line-height:1.6; margin-bottom:14px; }
+    .product-footer { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+    .product-price { font-family:'Nunito',sans-serif; font-size:1.45rem; font-weight:900; color:var(--pink); }
+    .product-price span { font-size:0.82rem; font-weight:600; color:var(--text-muted); }
+    .product-stock { font-size:0.83rem; color:var(--text-muted); }
+    .add-to-cart {
+      width:100%; background:var(--pink); color:#fff; border:none; border-radius:50px;
+      padding:13px; font-size:0.95rem; font-weight:700; cursor:pointer;
+      font-family:'Poppins',sans-serif; display:flex; align-items:center; justify-content:center; gap:8px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .add-to-cart:hover { background:var(--pink-mid); transform:translateY(-1px); }
+    .add-to-cart.added { background: #43a047; }
+
+    /* ─── CART (Orders page) ─── */
+    .cart-section { padding: 40px 56px 80px; }
+    .cart-inner { max-width: 860px; margin: 0 auto; }
+
+    .cart-empty {
+      text-align: center; padding: 72px 24px;
+      background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+    }
+    .cart-empty-icon { font-size: 4rem; margin-bottom: 16px; }
+    .cart-empty p { font-size: 1rem; color: var(--text-muted); margin-bottom: 24px; }
+
+    /* Cart row */
+    .cart-item {
+      background: var(--white); border-radius: var(--radius); padding: 18px 22px;
+      box-shadow: var(--shadow); display: flex; align-items: center;
+      gap: 16px; margin-bottom: 14px;
+    }
+    .cart-thumb {
+      width: 80px; height: 80px; border-radius: 12px; flex-shrink: 0;
+      background-size: cover; background-position: center; background-color: #eee;
+    }
+    .cart-info { flex: 1; min-width: 0; }
+    .cart-item-name {
+      font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 800;
+      color: var(--text); margin-bottom: 3px;
+    }
+    .cart-item-unit { font-size: 0.8rem; color: var(--text-muted); }
+    /* qty controls */
+    .qty-wrap { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .qty-btn {
+      width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--pink);
+      background: var(--white); color: var(--pink); font-size: 1.2rem; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s; flex-shrink: 0; line-height: 1;
+    }
+    .qty-btn:hover { background: var(--pink); color: #fff; }
+    .qty-num {
+      font-family: 'Nunito', sans-serif; font-size: 1.15rem; font-weight: 800;
+      min-width: 28px; text-align: center;
+    }
+    .cart-line-price {
+      font-family: 'Nunito', sans-serif; font-size: 1.1rem; font-weight: 900;
+      color: var(--pink); min-width: 72px; text-align: right; flex-shrink: 0;
+    }
+    .cart-del {
+      background: none; border: none; color: #ccc; font-size: 1.3rem;
+      cursor: pointer; flex-shrink: 0; transition: color 0.15s; padding: 4px;
+    }
+    .cart-del:hover { color: #e53935; }
+
+    /* Cart summary */
+    .cart-summary {
+      background: var(--white); border-radius: var(--radius);
+      padding: 24px 28px; box-shadow: var(--shadow); margin-top: 8px;
+    }
+    .summary-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 6px 0; font-size: 0.9rem; color: var(--text-muted);
+    }
+    .summary-row.grand {
+      border-top: 2px solid #f0f0f0; margin-top: 10px; padding-top: 16px;
+      font-size: 1.05rem; font-weight: 700; color: var(--text);
+    }
+    .grand-amount {
+      font-family: 'Nunito', sans-serif; font-size: 1.65rem; font-weight: 900; color: var(--pink);
+    }
+    .btn-paynow {
+      width: 100%; background: var(--pink); color: #fff; border: none;
+      border-radius: 50px; padding: 17px; font-size: 1.05rem; font-weight: 700;
+      cursor: pointer; font-family: 'Poppins', sans-serif; margin-top: 18px;
+      transition: background 0.2s, transform 0.15s; display: flex;
+      align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-paynow:hover { background: var(--pink-mid); transform: translateY(-2px); }
+
+    /* ─── CHECKOUT MODAL ─── */
+    .checkout-items {
+      background: #fafafa; border-radius: 14px; padding: 16px; margin-bottom: 4px;
+    }
+    .co-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+    }
+    .co-row:last-child { border-bottom: none; }
+    .co-thumb {
+      width: 52px; height: 52px; border-radius: 10px; flex-shrink: 0;
+      background-size: cover; background-position: center; background-color: #eee;
+    }
+    .co-detail { flex: 1; }
+    .co-detail strong { display: block; font-size: 0.9rem; font-weight: 700; color: var(--text); }
+    .co-detail span { font-size: 0.8rem; color: var(--text-muted); }
+    .co-price {
+      font-family: 'Nunito', sans-serif; font-weight: 800; color: var(--pink);
+      font-size: 0.95rem; flex-shrink: 0;
+    }
+    .co-total-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 14px; font-weight: 700; font-size: 1rem;
+    }
+    .co-total-row span:last-child {
+      font-family: 'Nunito', sans-serif; font-size: 1.3rem; color: var(--pink);
+    }
+
+    /* Payment option pills */
+    .pay-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+    .pay-opt {
+      border: 2px solid #e0e0e0; border-radius: 14px; padding: 12px 10px;
+      cursor: pointer; text-align: center; transition: all 0.15s;
+      background: var(--white);
+    }
+    .pay-opt:hover { border-color: var(--pink); }
+    .pay-opt.selected { border-color: var(--pink); background: var(--pink-light); }
+    .pay-opt .pay-icon { font-size: 1.5rem; margin-bottom: 4px; }
+    .pay-opt .pay-label { font-size: 0.8rem; font-weight: 600; color: var(--text); }
+
+    /* ─── ACCOUNT MODAL ─── */
+    .acc-lock { text-align: center; padding: 12px 0 8px; }
+    .acc-lock .lock-icon { font-size: 3.5rem; margin-bottom: 14px; }
+    .acc-lock p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; }
+    .pass-row { display: flex; gap: 10px; }
+    .pass-row input {
+      flex: 1; padding: 11px 16px; border: 2px solid #ebebeb; border-radius: 12px;
+      font-size: 0.9rem; font-family: 'Poppins', sans-serif; outline: none;
+      transition: border-color 0.2s; background: #fafafa;
+    }
+    .pass-row input:focus { border-color: var(--pink); background: #fff; }
+    .err-msg { color: #e53935; font-size: 0.82rem; margin-top: 8px; min-height: 20px; }
+    .success-toast {
+      background: #e8f5e9; color: #2e7d32; border-radius: 10px;
+      padding: 12px 16px; font-size: 0.88rem; font-weight: 600;
+      margin-bottom: 16px; display: none;
+    }
+    .default-pass-note {
+      margin-top: 18px; font-size: 0.76rem; color: #bbb; text-align: center;
+    }
+    .acc-actions { display: flex; gap: 12px; margin-top: 4px; }
+    .btn-lock {
+      background: #f5f5f5; color: var(--text-muted); border: none; border-radius: 50px;
+      padding: 14px 22px; font-size: 0.9rem; font-weight: 700; cursor: pointer;
+      font-family: 'Poppins', sans-serif; flex-shrink: 0; transition: background 0.2s;
+    }
+    .btn-lock:hover { background: #eee; }
+
+    /* ─── ORDER CONFIRMED MODAL ─── */
+    .confirmed-box { text-align: center; padding: 10px 0; }
+    .confirmed-icon { font-size: 4.5rem; margin-bottom: 16px; }
+
+    /* ─── HERO SLIDESHOW (要求2) ─── */
+    .hero {
+      position: relative; overflow: hidden;
+      height: clamp(400px, 58vw, 620px);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hero-track {
+      position: absolute; inset: 0;
+      display: flex; width: 500%;
+      animation: heroSlide 20s linear infinite;
+    }
+    .hero-slide {
+      flex: 0 0 20%;
+      background-size: cover; background-position: center; background-repeat: no-repeat;
+    }
+    .hero-slide:nth-child(1) { background-image: url('photoo/sizeA.JPG'); }
+    .hero-slide:nth-child(2) { background-image: url('photoo/Bubble Wrap.JPG'); }
+    .hero-slide:nth-child(3) { background-image: url('photoo/IMG_3754.JPG'); }
+    .hero-slide:nth-child(4) { background-image: url('photoo/IMG_3755.JPG'); }
+    .hero-slide:nth-child(5) { background-image: url('photoo/IMG_3757.JPG'); }
+    @keyframes heroSlide {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-80%); }
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg,
+        rgba(255,80,160,0.52) 0%,
+        rgba(60,0,50,0.72) 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      text-align: center; padding: 0 24px; max-width: 800px;
+    }
+    .hero-content h1 {
+      font-family: 'Nunito', sans-serif;
+      font-size: clamp(2.2rem, 6vw, 5rem);
+      font-weight: 900; color: #fff; letter-spacing: -1px; margin-bottom: 14px;
+      animation: titleDrop 1.1s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes titleDrop {
+      from { opacity: 0; transform: translateY(-56px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-content .tagline {
+      font-size: clamp(0.95rem, 2.5vw, 1.2rem); font-weight: 600;
+      color: rgba(255,255,255,0.92); margin-bottom: 10px;
+      animation: fadeUp 1s 0.28s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .hero-content .desc {
+      font-size: clamp(0.85rem, 2vw, 1rem);
+      color: rgba(255,255,255,0.76); margin-bottom: 36px;
+      animation: fadeUp 1s 0.44s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .hero-content .hero-btns {
+      display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;
+      animation: fadeUp 1s 0.60s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-scroll {
+      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+      z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 5px;
+      color: rgba(255,255,255,0.55); font-size: 0.72rem; letter-spacing: 0.1em;
+      animation: bobble 2.2s ease-in-out infinite;
+    }
+    @keyframes bobble {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50%      { transform: translateX(-50%) translateY(7px); }
+    }
+
+    /* ─── FOOTER ─── */
+    footer { background:var(--white); padding:40px 56px 28px; border-top:1px solid #f0e0ea; }
+    .footer-grid { display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:48px; margin-bottom:32px; }
+    .footer-brand p { font-size:0.87rem; color:var(--text-muted); line-height:1.7; margin-top:12px; }
+    .footer-col h4 { font-family:'Nunito',sans-serif; font-size:1rem; font-weight:800; color:var(--pink-dark); margin-bottom:14px; }
+    .footer-col p { font-size:0.87rem; color:var(--text-muted); line-height:2; }
+    .footer-bottom { text-align:center; font-size:0.82rem; color:var(--text-muted); padding-top:20px; border-top:1px solid #f0f0f0; }
+
+    /* ─── HELP BUBBLE ─── */
+    .help-bubble {
+      position:fixed; bottom:28px; right:28px; width:46px; height:46px;
+      background:var(--white); border-radius:50%; box-shadow:0 4px 16px rgba(0,0,0,0.15);
+      display:flex; align-items:center; justify-content:center; font-size:1.2rem;
+      cursor:pointer; color:var(--text-muted); border:1px solid #eee; z-index:300;
+    }
+
+    /* ─── HOME ─── */
+    .hero { background:var(--cream); text-align:center; padding:80px 48px 90px; }
+    .hero h1 { font-family:'Nunito',sans-serif; font-size:clamp(2.4rem,6vw,4.5rem); font-weight:900; color:var(--cream); letter-spacing:-1px; margin-bottom:14px; }
+    .hero .tagline { font-size:1.15rem; font-weight:600; color:var(--text); margin-bottom:10px; }
+    .hero .desc { font-size:0.97rem; color:var(--text-muted); margin-bottom:40px; }
+    .hero-btns { display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap; }
+    .why { padding:72px 56px; background:var(--bg); }
+    .why h2 { text-align:center; font-family:'Nunito',sans-serif; font-size:2rem; font-weight:800; color:var(--pink-dark); margin-bottom:48px; }
+    .features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:24px; max-width:1100px; margin:0 auto; }
+    .feature-card { background:var(--white); border-radius:var(--radius); padding:36px 24px 32px; text-align:center; box-shadow:var(--shadow); transition:box-shadow 0.2s,transform 0.2s; }
+    .feature-card:hover { box-shadow:var(--shadow-hover); transform:translateY(-4px); }
+    .feature-icon { width:72px; height:72px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; font-size:1.9rem; }
+    .feature-card:nth-child(1) .feature-icon { background:#ffe0f0; }
+    .feature-card:nth-child(2) .feature-icon { background:#e0f7fa; }
+    .feature-card:nth-child(3) .feature-icon { background:#e8f5e9; }
+    .feature-card:nth-child(4) .feature-icon { background:#ede7f6; }
+    .feature-card h3 { font-family:'Nunito',sans-serif; font-size:1.08rem; font-weight:800; margin-bottom:10px; }
+    .feature-card:nth-child(1) h3 { color:var(--pink); }
+    .feature-card:nth-child(2) h3 { color:var(--teal); }
+    .feature-card:nth-child(3) h3 { color:var(--green); }
+    .feature-card:nth-child(4) h3 { color:var(--purple); }
+    .feature-card p { font-size:0.88rem; color:var(--text-muted); line-height:1.6; }
+    .featured { padding:0 56px 60px; background:var(--bg); }
+    .featured-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:32px; }
+    .featured-header h2 { font-family:'Nunito',sans-serif; font-size:1.8rem; font-weight:800; color:var(--pink); }
+    .view-all { color:var(--pink-dark); font-weight:700; font-size:0.95rem; display:flex; align-items:center; gap:4px; cursor:pointer; }
+    .view-all:hover { gap:8px; }
+    .cta-section { padding:60px 56px 72px; background:var(--bg); }
+    .cta-card { max-width:1100px; margin:0 auto; background:linear-gradient(135deg,#ffd6e8 0%,#e8c0f0 100%); border-radius:28px; padding:72px 48px; text-align:center; }
+    .cta-card h2 { font-family:'Nunito',sans-serif; font-size:2.2rem; font-weight:900; color:var(--pink-dark); margin-bottom:16px; }
+    .cta-card p { font-size:1rem; color:var(--text); margin-bottom:40px; }
+    .cta-btns { display:flex; align-items:center; justify-content:center; gap:16px; }
+
+    /* ─── PRODUCTS PAGE ─── */
+    .page-hero { background:var(--cream); text-align:center; padding:60px 48px 40px; }
+    .page-hero h1 { font-family:'Nunito',sans-serif; font-size:clamp(2rem,5vw,3.5rem); font-weight:900; color:var(--pink); margin-bottom:10px; }
+    .page-hero p { font-size:1rem; font-weight:600; color:var(--text); margin-bottom:32px; }
+    .search-bar { max-width:520px; margin:0 auto 28px; display:flex; align-items:center; gap:12px; background:var(--white); border-radius:50px; padding:12px 22px; box-shadow:0 2px 12px rgba(0,0,0,0.08); }
+    .search-bar input { border:none; outline:none; font-size:0.95rem; font-family:'Poppins',sans-serif; width:100%; color:var(--text); background:transparent; }
+    .filter-tabs { display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; }
+    .filter-btn { border:2px solid #ddd; background:var(--white); border-radius:50px; padding:9px 22px; font-size:0.92rem; font-weight:600; cursor:pointer; font-family:'Poppins',sans-serif; color:var(--text); transition:all 0.2s; }
+    .filter-btn.active { background:var(--pink); color:#fff; border-color:var(--pink); }
+    .filter-btn:hover:not(.active) { border-color:var(--pink); color:var(--pink); }
+    .products-list { padding:40px 56px 80px; }
+
+    /* ─── ORDERS HERO ─── */
+    .orders-hero { background:var(--cream); text-align:center; padding:56px 48px 36px; }
+    .orders-hero h1 { font-family:'Nunito',sans-serif; font-size:clamp(2rem,5vw,3rem); font-weight:900; color:var(--pink); margin-bottom:8px; }
+    .orders-hero p { font-size:0.97rem; color:var(--text-muted); }
+
+    /* ─── ABOUT ─── */
+    .values-section { padding:60px 56px 40px; background:var(--cream); }
+    .values-section h2 { text-align:center; font-family:'Nunito',sans-serif; font-size:2rem; font-weight:800; color:var(--pink-dark); margin-bottom:40px; }
+    .values-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:24px; max-width:1100px; margin:0 auto; }
+    .value-card { background:var(--white); border-radius:var(--radius); padding:40px 32px 36px; text-align:center; box-shadow:var(--shadow); transition:box-shadow 0.2s,transform 0.2s; }
+    .value-card:hover { box-shadow:var(--shadow-hover); transform:translateY(-4px); }
+    .value-icon { width:80px; height:80px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 22px; font-size:2.2rem; }
+    .value-card:nth-child(1) .value-icon { background:#ffe0f0; }
+    .value-card:nth-child(2) .value-icon { background:#e0f7fa; }
+    .value-card:nth-child(3) .value-icon { background:#e8f5e9; }
+    .value-card h3 { font-family:'Nunito',sans-serif; font-size:1.15rem; font-weight:800; margin-bottom:12px; }
+    .value-card:nth-child(1) h3 { color:var(--pink-dark); }
+    .value-card:nth-child(2) h3 { color:var(--teal); }
+    .value-card:nth-child(3) h3 { color:var(--green); }
+    .value-card p { font-size:0.9rem; color:var(--text-muted); line-height:1.6; }
+    .services-section { padding:40px 56px; background:var(--cream); }
+    .services-section h2 { text-align:center; font-family:'Nunito',sans-serif; font-size:2rem; font-weight:800; color:var(--pink-dark); margin-bottom:32px; }
+    .services-card { max-width:1100px; margin:0 auto; background:var(--white); border-radius:var(--radius); padding:44px 48px; box-shadow:var(--shadow); }
+    .services-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px 48px; }
+    .service-item { display:flex; align-items:flex-start; gap:18px; }
+    .service-icon { width:52px; height:52px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1.4rem; }
+    .si-pink{background:var(--pink);} .si-teal{background:#00bcd4;} .si-green{background:#4caf50;} .si-purple{background:#9c27b0;}
+    .service-text h4 { font-family:'Nunito',sans-serif; font-size:1.05rem; font-weight:800; color:var(--text); margin-bottom:6px; }
+    .service-text p { font-size:0.87rem; color:var(--text-muted); line-height:1.6; }
+    .contact-section { padding:40px 56px 60px; background:var(--cream); }
+    .contact-gradient { max-width:1100px; margin:0 auto; background:linear-gradient(135deg,#ffd6e8 0%,#e8c0f0 100%); border-radius:28px; padding:48px 56px 0; overflow:hidden; }
+    .contact-gradient h2 { font-family:'Nunito',sans-serif; font-size:2rem; font-weight:800; color:var(--pink-dark); text-align:center; margin-bottom:10px; }
+    .contact-gradient > p { text-align:center; color:var(--text-muted); margin-bottom:36px; font-size:0.95rem; }
+    .contact-info-grid { background:var(--white); border-radius:20px 20px 0 0; padding:40px 48px; display:grid; grid-template-columns:1fr 1fr; gap:32px; }
+    .contact-item { display:flex; align-items:flex-start; gap:18px; }
+    .contact-icon { width:52px; height:52px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1.4rem; }
+    .ci-pink{background:#ffe0f0;} .ci-teal{background:#e0f7fa;} .ci-green{background:#e8f5e9;} .ci-purple{background:#ede7f6;}
+    .contact-item h4 { font-family:'Nunito',sans-serif; font-size:1rem; font-weight:800; color:var(--text); margin-bottom:6px; }
+    .contact-item p { font-size:0.87rem; color:var(--text-muted); line-height:1.8; }
+
+    /* ─── HAMBURGER ─── */
+    .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:6px; border:none; background:transparent; }
+    .hamburger span { display:block; width:24px; height:2px; background:var(--text); border-radius:2px; transition:all 0.3s; }
+    .hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity:0; }
+    .hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+    .nav-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.3); z-index:150; }
+    .nav-overlay.open { display:block; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1024px) {
+      nav { padding:14px 32px; }
+      .hero { padding:60px 32px 70px; }
+      .why,.featured,.cta-section,.products-list,.cart-section { padding-left:32px; padding-right:32px; }
+      .values-section,.services-section,.contact-section { padding-left:32px; padding-right:32px; }
+      footer { padding-left:32px; padding-right:32px; }
+      .services-card { padding:36px 32px; }
+      .contact-gradient { padding:40px 32px 0; }
+      .contact-info-grid { padding:32px 32px; }
+      .footer-grid { gap:32px; }
+    }
+    @media (max-width: 768px) {
+      nav { padding:14px 20px; }
+      .hamburger { display:flex; }
+      .nav-links {
+        position:fixed; top:0; right:-280px; width:260px; height:100vh;
+        background:var(--white); flex-direction:column; gap:4px;
+        padding:80px 20px 32px; box-shadow:-4px 0 24px rgba(0,0,0,0.12);
+        z-index:500; transition:right 0.3s ease;
+      }
+      .nav-links.open { right:0; }
+      .nav-links li a { padding:12px 18px; font-size:1rem; }
+      .hero { padding:48px 20px 56px; }
+      .hero-btns { flex-direction:column; align-items:stretch; }
+      .hero-btns button { width:100%; }
+      .why { padding:48px 20px; }
+      .features-grid { grid-template-columns:1fr 1fr; gap:16px; }
+      .feature-card { padding:24px 16px 20px; }
+      .feature-icon { width:56px; height:56px; font-size:1.5rem; }
+      .featured { padding:0 20px 48px; }
+      .products-grid { grid-template-columns:1fr; gap:20px; }
+      .cta-section { padding:40px 20px 56px; }
+      .cta-card { padding:48px 24px; }
+      .cta-card h2 { font-size:1.7rem; }
+      .cta-btns { flex-direction:column; align-items:stretch; }
+      .cta-btns button { width:100%; }
+      .page-hero { padding:40px 20px 32px; }
+      .page-hero h1 { font-size:2rem; }
+      .search-bar { margin:0 0 20px; }
+      .filter-tabs { gap:8px; }
+      .filter-btn { padding:7px 14px; font-size:0.82rem; }
+      .products-list { padding:28px 20px 56px; }
+      .orders-hero { padding:40px 20px 28px; }
+      .cart-section { padding:28px 20px 56px; }
+      .cart-item { flex-wrap:wrap; gap:12px; }
+      .qty-wrap { order:3; }
+      .cart-line-price { order:4; }
+      .cart-del { order:5; }
+      .values-section { padding:48px 20px 32px; }
+      .values-section h2 { font-size:1.7rem; margin-bottom:28px; }
+      .values-grid { grid-template-columns:1fr; gap:16px; }
+      .value-card { padding:28px 24px; }
+      .services-section { padding:32px 20px; }
+      .services-section h2 { font-size:1.7rem; }
+      .services-card { padding:28px 20px; }
+      .services-grid { grid-template-columns:1fr; gap:24px; }
+      .contact-section { padding:32px 20px 48px; }
+      .contact-gradient { padding:36px 20px 0; border-radius:20px; }
+      .contact-gradient h2 { font-size:1.7rem; }
+      .contact-info-grid { grid-template-columns:1fr; padding:28px 20px; gap:24px; }
+      footer { padding:36px 20px 24px; }
+      .footer-grid { grid-template-columns:1fr; gap:28px; }
+      .form-row { grid-template-columns:1fr; }
+      .pay-options { grid-template-columns:1fr 1fr; }
+      .modal-box { padding:28px 20px; }
+      .acc-actions { flex-direction:column; }
+    }
+    @media (max-width: 480px) {
+      .features-grid { grid-template-columns:1fr; }
+      .feature-card { display:flex; align-items:center; gap:16px; text-align:left; padding:20px; }
+      .feature-icon { margin:0; flex-shrink:0; }
+      .logo { font-size:1rem; }
+      .logo svg { width:24px; height:24px; }
+    }
+    /* ─── PRODUCT DETAIL PAGE (要求1) ─── */
+    .detail-back {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--pink-dark); font-weight: 700; font-size: 0.92rem;
+      cursor: pointer; padding: 8px 0; margin-bottom: 20px;
+      background: none; border: none; font-family: 'Poppins', sans-serif;
+      transition: gap 0.2s;
+    }
+    .detail-back:hover { gap: 12px; }
+
+    .detail-layout {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+      max-width: 1100px; margin: 0 auto; align-items: start;
+    }
+
+    /* ── Image slider ── */
+    .detail-slider { position: relative; border-radius: 20px; overflow: hidden; background: #f0f0f0; }
+    .detail-slides-wrap { overflow: hidden; border-radius: 20px; }
+    .detail-slides {
+      display: flex; transition: transform 0.45s cubic-bezier(0.22,1,0.36,1);
+    }
+    .detail-slide {
+      flex: 0 0 100%; height: 380px;
+      background-size: contain; background-position: center; background-repeat: no-repeat;
+      background-color: #f8f8f8;
+    }
+    /* arrow buttons */
+    .detail-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,0.9); border: none; border-radius: 50%;
+      width: 40px; height: 40px; font-size: 1.2rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.14); z-index: 2;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .detail-arrow:hover { background: var(--white); transform: translateY(-50%) scale(1.1); }
+    .detail-arrow.prev { left: 10px; }
+    .detail-arrow.next { right: 10px; }
+    /* dots */
+    .detail-dots {
+      display: flex; justify-content: center; gap: 8px; margin-top: 14px;
+    }
+    .detail-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: #ddd; cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .detail-dot.active { background: var(--pink); transform: scale(1.3); }
+    /* thumbnail strip */
+    .detail-thumbs {
+      display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap;
+    }
+    .detail-thumb {
+      width: 64px; height: 64px; border-radius: 10px; cursor: pointer;
+      background-size: cover; background-position: center; background-color: #eee;
+      border: 2px solid transparent; transition: border-color 0.2s, transform 0.15s;
+      flex-shrink: 0;
+    }
+    .detail-thumb.active { border-color: var(--pink); transform: scale(1.07); }
+
+    /* ── Info panel ── */
+    .detail-info { padding: 8px 0; }
+    .detail-tag {
+      display: inline-block; background: var(--pink-light); color: var(--pink-dark);
+      font-size: 0.78rem; font-weight: 700; padding: 5px 14px;
+      border-radius: 50px; margin-bottom: 14px;
+    }
+    .detail-name {
+      font-family: 'Nunito', sans-serif; font-size: 2rem; font-weight: 900;
+      color: var(--text); margin-bottom: 10px; line-height: 1.2;
+    }
+    .detail-price-row {
+      display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;
+    }
+    .detail-price {
+      font-family: 'Nunito', sans-serif; font-size: 2.2rem; font-weight: 900; color: var(--pink);
+    }
+    .detail-unit { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; }
+    .detail-stock-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #e8f5e9; color: #2e7d32; border-radius: 50px;
+      padding: 4px 14px; font-size: 0.82rem; font-weight: 700; margin-bottom: 20px;
+    }
+    .detail-desc {
+      font-size: 0.93rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 24px;
+    }
+    /* Specs table */
+    .detail-specs {
+      background: #fafafa; border-radius: 14px; padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+    .detail-specs h4 {
+      font-family: 'Nunito', sans-serif; font-size: 0.95rem; font-weight: 800;
+      color: var(--text); margin-bottom: 12px;
+    }
+    .spec-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 7px 0; border-bottom: 1px solid #f0f0f0; font-size: 0.87rem;
+    }
+    .spec-row:last-child { border-bottom: none; }
+    .spec-key { color: var(--text-muted); }
+    .spec-val { font-weight: 600; color: var(--text); }
+    /* qty + add btn */
+    .detail-order-row {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 14px;
+    }
+    .detail-qty-wrap {
+      display: flex; align-items: center; gap: 10px;
+      background: #f5f5f5; border-radius: 50px; padding: 6px 16px;
+    }
+    .detail-add-btn {
+      flex: 1; background: var(--pink); color: #fff; border: none; border-radius: 50px;
+      padding: 14px 24px; font-size: 1rem; font-weight: 700; cursor: pointer;
+      font-family: 'Poppins', sans-serif; display: flex; align-items: center;
+      justify-content: center; gap: 8px; transition: background 0.2s, transform 0.15s;
+    }
+    .detail-add-btn:hover { background: var(--pink-mid); transform: translateY(-2px); }
+    .detail-add-btn.added { background: #43a047; }
+
+    /* ── Reviews ── */
+    .detail-reviews { max-width: 1100px; margin: 48px auto 0; }
+    .detail-reviews h3 {
+      font-family: 'Nunito', sans-serif; font-size: 1.4rem; font-weight: 800;
+      color: var(--pink-dark); margin-bottom: 24px;
+    }
+    .review-summary {
+      display: flex; align-items: center; gap: 20px;
+      background: var(--white); border-radius: 16px; padding: 20px 28px;
+      box-shadow: var(--shadow); margin-bottom: 20px;
+    }
+    .review-avg {
+      font-family: 'Nunito', sans-serif; font-size: 3.2rem; font-weight: 900; color: var(--pink);
+      line-height: 1;
+    }
+    .review-stars { font-size: 1.4rem; letter-spacing: 2px; margin-bottom: 4px; }
+    .review-count { font-size: 0.82rem; color: var(--text-muted); }
+    .review-card {
+      background: var(--white); border-radius: 16px; padding: 20px 24px;
+      box-shadow: var(--shadow); margin-bottom: 14px;
+    }
+    .review-header {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+    }
+    .review-avatar {
+      width: 40px; height: 40px; border-radius: 50%; background: var(--pink-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 800; color: var(--pink-dark); flex-shrink: 0;
+    }
+    .review-meta { flex: 1; }
+    .review-name { font-weight: 700; font-size: 0.92rem; color: var(--text); }
+    .review-date { font-size: 0.78rem; color: var(--text-muted); }
+    .review-stars-sm { font-size: 0.95rem; letter-spacing: 1px; }
+    .review-text { font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; }
+
+    /* Detail page padding */
+    .detail-page-inner { padding: 32px 56px 80px; }
+
+    @media (max-width: 1024px) {
+      .detail-page-inner { padding: 28px 32px 64px; }
+    }
+    @media (max-width: 768px) {
+      .detail-layout { grid-template-columns: 1fr; gap: 28px; }
+      .detail-page-inner { padding: 24px 20px 56px; }
+      .detail-slide { height: 260px; }
+      .detail-name { font-size: 1.5rem; }
+      .detail-price { font-size: 1.8rem; }
+      .detail-order-row { flex-wrap: wrap; }
+      .detail-add-btn { width: 100%; }
+    }
+    /* ─── REVIEW FORM ─── */
+    .review-form-wrap {
+      background: var(--white); border-radius: 20px; padding: 28px 32px;
+      box-shadow: var(--shadow); margin-top: 28px;
+    }
+    .review-form-wrap h4 {
+      font-family: 'Nunito', sans-serif; font-size: 1.15rem; font-weight: 800;
+      color: var(--pink-dark); margin-bottom: 20px;
+    }
+    /* Star picker */
+    .star-picker { display: flex; gap: 6px; margin-bottom: 16px; flex-direction: row-reverse; justify-content: flex-end; }
+    .star-picker input { display: none; }
+    .star-picker label {
+      font-size: 2rem; cursor: pointer; color: #ddd;
+      transition: color 0.15s, transform 0.1s;
+      line-height: 1;
+    }
+    /* Hover — fill current + all to the right (visually left in RTL flex) */
+    .star-picker label:hover,
+    .star-picker label:hover ~ label,
+    .star-picker input:checked ~ label { color: #f5a623; }
+    .star-picker label:hover { transform: scale(1.2); }
+    .star-hint { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 16px; }
+    .review-name-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .review-input {
+      width: 100%; padding: 11px 16px; border: 2px solid #ebebeb; border-radius: 12px;
+      font-size: 0.9rem; font-family: 'Poppins', sans-serif; color: var(--text);
+      outline: none; transition: border-color 0.2s; background: #fafafa;
+    }
+    .review-input:focus { border-color: var(--pink); background: #fff; }
+    .review-textarea {
+      width: 100%; padding: 12px 16px; border: 2px solid #ebebeb; border-radius: 12px;
+      font-size: 0.9rem; font-family: 'Poppins', sans-serif; color: var(--text);
+      outline: none; resize: vertical; min-height: 90px;
+      transition: border-color 0.2s; background: #fafafa; margin-bottom: 14px;
+    }
+    .review-textarea:focus { border-color: var(--pink); background: #fff; }
+    .review-submit {
+      background: var(--pink); color: #fff; border: none; border-radius: 50px;
+      padding: 13px 32px; font-size: 0.95rem; font-weight: 700; cursor: pointer;
+      font-family: 'Poppins', sans-serif; transition: background 0.2s, transform 0.15s;
+    }
+    .review-submit:hover { background: var(--pink-mid); transform: translateY(-2px); }
+    .review-success {
+      display: none; background: #e8f5e9; color: #2e7d32; border-radius: 12px;
+      padding: 12px 18px; font-size: 0.88rem; font-weight: 600; margin-top: 12px;
+    }
+    .review-err { color: #e53935; font-size: 0.8rem; margin-top: 6px; min-height: 18px; }
+    @media (max-width: 480px) {
+      .review-name-row { grid-template-columns: 1fr; }
+      .review-form-wrap { padding: 22px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     MODALS
+════════════════════════════════════════ -->
+
+<!-- ── Checkout Modal (要求5) ── -->
+<div class="modal-overlay" id="modalCheckout">
+  <div class="modal-box" style="max-width:580px;">
+    <button class="modal-close" onclick="closeModal('modalCheckout')">✕</button>
+    <h2>💳 Confirm & Pay</h2>
+    <p class="modal-subtitle">Review your order and enter payment details.</p>
+
+    <!-- Order summary -->
+    <div class="checkout-items" id="coItems"></div>
+    <div class="co-total-row" id="coTotal">
+      <span>Total</span><span>$0</span>
+    </div>
+
+    <hr class="modal-divider"/>
+
+    <!-- Payment method -->
+    <div class="form-group">
+      <label>💳 Payment Method</label>
+      <div class="pay-options">
+        <div class="pay-opt" id="pay-bank" onclick="selectPay('bank')">
+          <div class="pay-icon">🏦</div>
+          <div class="pay-label">Bank Transfer</div>
+        </div>
+        <div class="pay-opt" id="pay-promptpay" onclick="selectPay('promptpay')">
+          <div class="pay-icon">📱</div>
+          <div class="pay-label">PromptPay</div>
+        </div>
+        <div class="pay-opt" id="pay-cod" onclick="selectPay('cod')">
+          <div class="pay-icon">💵</div>
+          <div class="pay-label">Cash on Delivery</div>
+        </div>
+        <div class="pay-opt" id="pay-card" onclick="selectPay('card')">
+          <div class="pay-icon">💳</div>
+          <div class="pay-label">Credit Card</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="modal-divider"/>
+
+    <!-- Delivery address -->
+    <div class="form-group">
+      <label>📦 Recipient Name</label>
+      <input type="text" id="co-name" placeholder="Full name"/>
+    </div>
+    <div class="form-group">
+      <label>📞 Phone Number</label>
+      <input type="tel" id="co-phone" placeholder="0XX-XXX-XXXX"/>
+    </div>
+    <div class="form-group">
+      <label>📍 Delivery Address</label>
+      <textarea id="co-address" placeholder="House number, street, district, city, postcode…" rows="3"></textarea>
+    </div>
+
+    <button class="btn-green btn-full" style="border-radius:50px;padding:16px;font-size:1rem;font-weight:700;margin-top:6px;" onclick="confirmOrder()">
+      ✅ Place Order
+    </button>
+  </div>
+</div>
+
+<!-- ── Order Confirmed Modal ── -->
+<div class="modal-overlay" id="modalConfirmed">
+  <div class="modal-box" style="max-width:420px;">
+    <div class="confirmed-box">
+      <div class="confirmed-icon">🎉</div>
+      <h2 style="color:#43a047;text-align:center;margin-bottom:12px;">Order Placed!</h2>
+      <p style="color:var(--text-muted);font-size:0.95rem;margin-bottom:28px;text-align:center;">
+        Thank you! We'll process your order and contact you soon.
+      </p>
+      <button class="btn-primary btn-full" onclick="closeModal('modalConfirmed');clearCart();">
+        Continue Shopping
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Account Modal (要求6) ── -->
+<div class="modal-overlay" id="modalAccount">
+  <div class="modal-box" style="max-width:520px;">
+    <button class="modal-close" onclick="closeModal('modalAccount')">✕</button>
+    <h2>👤 Account</h2>
+    <p class="modal-subtitle">Manage your profile and saved preferences.</p>
+
+    <!-- Lock screen -->
+    <div id="accLockScreen">
+      <div class="acc-lock">
+        <div class="lock-icon">🔒</div>
+        <p>Enter your password to access account settings.</p>
+        <div class="pass-row">
+          <input type="password" id="passInput" placeholder="Password…"
+                 onkeydown="if(event.key==='Enter')checkPass()"/>
+          <button class="btn-primary" style="padding:11px 24px;font-size:0.9rem;" onclick="checkPass()">Enter</button>
+        </div>
+        <div class="err-msg" id="passErr"></div>
+        <p class="default-pass-note">Default password: <strong>1234</strong></p>
+      </div>
+    </div>
+
+    <!-- Account form (shown after unlock) -->
+    <div id="accFormScreen" style="display:none;">
+      <div class="success-toast" id="accToast">✅ Saved successfully!</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>👤 Name</label>
+          <input type="text" id="acc-name" placeholder="Your name"/>
+        </div>
+        <div class="form-group">
+          <label>🏪 Shop / Company</label>
+          <input type="text" id="acc-shop" placeholder="Shop name"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>✉️ Email</label>
+          <input type="email" id="acc-email" placeholder="email@example.com"/>
+        </div>
+        <div class="form-group">
+          <label>📞 Phone</label>
+          <input type="tel" id="acc-phone" placeholder="0XX-XXX-XXXX"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>📍 Delivery Address</label>
+        <textarea id="acc-address" placeholder="Default delivery address…" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label>💳 Preferred Payment</label>
+        <select id="acc-payment">
+          <option value="">-- Select --</option>
+          <option value="bank">Bank Transfer</option>
+          <option value="promptpay">PromptPay</option>
+          <option value="cod">Cash on Delivery</option>
+          <option value="card">Credit Card</option>
+        </select>
+      </div>
+
+      <hr class="modal-divider"/>
+
+      <div class="form-group">
+        <label>🔑 Change Password <span style="font-weight:400;color:#bbb;">(leave blank to keep current)</span></label>
+        <input type="password" id="acc-newpass" placeholder="New password…"/>
+      </div>
+
+      <div class="acc-actions">
+        <button class="btn-primary btn-full" onclick="saveAccount()">Save Changes</button>
+        <button class="btn-lock" onclick="lockAccount()">🔒 Lock</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     NAV
+════════════════════════════════════════ -->
+<div class="nav-overlay" id="navOverlay" onclick="closeMenu()"></div>
+<nav>
+  <span class="logo" onclick="showPage('home')">
+    <svg width="30" height="30" viewBox="0 0 40 40" fill="none">
+      <path d="M20 6L34 14V26L20 34L6 26V14L20 6Z" stroke="#ff69b4" stroke-width="2.5" fill="none"/>
+      <path d="M20 6L20 34M6 14L34 14M6 26L34 26" stroke="#ff69b4" stroke-width="1.5" opacity="0.4"/>
+    </svg>
+    Tee Ouan Packaging
+  </span>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a id="nav-home"    onclick="showPage('home')"    class="active">🏠 Home</a></li>
+    <li><a id="nav-products" onclick="showPage('products')">📦 Products</a></li>
+    <li><a id="nav-orders"  onclick="showPage('orders')">
+      🛒 Orders
+      <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
+    </a></li>
+    <li><a id="nav-about"   onclick="showPage('about')">ℹ️ About Us</a></li>
+    <li><a id="nav-account" onclick="openAccountModal()">👤 Account</a></li>
+  </ul>
+</nav>
+
+<!-- ════════════════════════════════════════
+     HOME PAGE
+════════════════════════════════════════ -->
+<div id="page-home" class="page active">
+  <section class="hero">
+    <!-- スライドショー背景 (右→左) -->
+    <div class="hero-track">
+      <div class="hero-slide"></div>
+      <div class="hero-slide"></div>
+      <div class="hero-slide"></div>
+      <div class="hero-slide"></div>
+      <div class="hero-slide"></div>
+    </div>
+    <div class="hero-overlay"></div>
+    <!-- テキスト (上からスライドイン) -->
+    <div class="hero-content">
+      <h1>Tee Ouan Packaging</h1>
+      <p class="tagline">Quality Packaging Supplier – Complete Solutions</p>
+      <p class="desc">Wide variety of products, affordable prices, with express delivery service</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="showPage('products')">View All Products</button>
+      </div>
+    </div>
+    <!-- スクロールインジケーター -->
+    <div class="hero-scroll">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M7 10l5 5 5-5"/>
+      </svg>
+      SCROLL
+    </div>
+  </section>
+
+  <section class="why">
+    <h2>Why Choose Us</h2>
+    <div class="features-grid">
+      <div class="feature-card"><div class="feature-icon">📦</div><h3>Wide Variety</h3><p>All types of packaging to meet every need</p></div>
+      <div class="feature-card"><div class="feature-icon">🏅</div><h3>High Quality</h3><p>Carefully selected premium products</p></div>
+      <div class="feature-card"><div class="feature-icon">🚚</div><h3>Fast Delivery</h3><p>Express delivery nationwide</p></div>
+      <div class="feature-card"><div class="feature-icon">💜</div><h3>Great Service</h3><p>Consultation and close customer care</p></div>
+    </div>
+  </section>
+
+  <section class="featured">
+    <div class="featured-header">
+      <h2>Featured Products</h2>
+      <span class="view-all" onclick="showPage('products')">View All →</span>
+    </div>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="product-img-fixed img-box-a"></div>
+        <div class="product-body">
+          <span class="product-tag">Boxes</span>
+          <div class="product-name">Corrugated Box Size A</div>
+          <div class="product-desc">3-ply corrugated cardboard box, strong and durable, suitable for general packaging</div>
+          <div class="product-footer"><div class="product-price">$15 <span>/pc</span></div><div class="product-stock">Stock: 500</div></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img-fixed img-bubble"></div>
+        <div class="product-body">
+          <span class="product-tag">Protective Materials</span>
+          <div class="product-name">Bubble Wrap</div>
+          <div class="product-desc">Bubble wrap for shock protection, prevents product damage, ready to use</div>
+          <div class="product-footer"><div class="product-price">$120 <span>/roll</span></div><div class="product-stock">Stock: 200</div></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img-fixed img-bags"></div>
+        <div class="product-body">
+          <span class="product-tag">Bags</span>
+          <div class="product-name">Kraft Paper Bags</div>
+          <div class="product-desc">Eco-friendly kraft paper bags with handles, strong and durable</div>
+          <div class="product-footer"><div class="product-price">$5 <span>/pc</span></div><div class="product-stock">Stock: 1000</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="cta-card">
+      <h2>Ready to Order?</h2>
+      <p>Our team is ready to provide consultation and assistance 24/7</p>
+      <div class="cta-btns">
+        <button class="btn-white" onclick="showPage('products')">Browse Products</button>
+        <button class="btn-purple" onclick="showPage('about')">About Us</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="logo" onclick="showPage('home')">
+          <svg width="26" height="26" viewBox="0 0 40 40" fill="none"><path d="M20 6L34 14V26L20 34L6 26V14L20 6Z" stroke="#ff69b4" stroke-width="2.5" fill="none"/><path d="M20 6L20 34M6 14L34 14M6 26L34 26" stroke="#ff69b4" stroke-width="1.5" opacity="0.4"/></svg>
+          Tee Ouan Packaging
+        </span>
+        <p>Quality packaging supplier with diverse products, affordable prices, and express delivery service</p>
+      </div>
+      <div class="footer-col"><h4>Contact Us</h4><p>Phone: 0814800003<br>Email: info@teeouanpackaging.com<br>LINE: @teeouanpack</p></div>
+      <div class="footer-col"><h4>Business Hours</h4><p>Mon - Sat: 7:00 AM - 7:00 PM<br>Sun: 7:00 AM - 5:30 PM</p></div>
+    </div>
+    <div class="footer-bottom">© 2026 Tee Ouan Packaging — All rights reserved</div>
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════════
+     PRODUCTS PAGE
+════════════════════════════════════════ -->
+<div id="page-products" class="page">
+  <section class="page-hero">
+    <h1>Our Products</h1>
+    <p>Choose the right packaging for you</p>
+    <div class="search-bar">
+      <span style="font-size:1.1rem;color:#aaa;">🔍</span>
+      <input type="text" placeholder="Search products..." id="searchInput" oninput="filterProducts()"/>
+    </div>
+    <div class="filter-tabs">
+      <button class="filter-btn active" onclick="filterCategory('All',this)">All</button>
+      <button class="filter-btn" onclick="filterCategory('Boxes',this)">Boxes</button>
+      <button class="filter-btn" onclick="filterCategory('Bags',this)">Bags</button>
+      <button class="filter-btn" onclick="filterCategory('Protective Materials',this)">Protective Materials</button>
+      <button class="filter-btn" onclick="filterCategory('Eco-Friendly',this)">Eco-Friendly</button>
+    </div>
+  </section>
+
+  <section class="products-list">
+    <div class="products-grid" id="productsGrid">
+
+      <div class="product-card" data-category="Boxes" data-name="corrugated box size a"
+           data-id="box-a" data-price="15" data-unit="/pc" data-img="img-box-a">
+        <div class="product-img-fixed img-box-a" onclick="openDetail('box-a')" style="cursor:pointer;"></div>
+        <div class="product-body" onclick="openDetail('box-a')" style="cursor:pointer;padding-bottom:8px;">
+          <span class="product-tag">Boxes</span>
+          <div class="product-name">Corrugated Box Size A</div>
+          <div class="product-desc">3-ply corrugated cardboard box, strong and durable, suitable for general packaging</div>
+          <div class="product-footer"><div class="product-price">$15 <span>/pc</span></div><div class="product-stock">Stock: 500</div></div>
+        </div>
+        <div style="padding:0 20px 20px;">
+          <button class="add-to-cart" onclick="addToCart(this)">🛒 Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="Protective Materials" data-name="bubble wrap"
+           data-id="bubble" data-price="120" data-unit="/roll" data-img="img-bubble">
+        <div class="product-img-fixed img-bubble" onclick="openDetail('bubble')" style="cursor:pointer;"></div>
+        <div class="product-body" onclick="openDetail('bubble')" style="cursor:pointer;padding-bottom:8px;">
+          <span class="product-tag">Protective Materials</span>
+          <div class="product-name">Bubble Wrap</div>
+          <div class="product-desc">Bubble wrap for shock protection, prevents product damage, ready to use</div>
+          <div class="product-footer"><div class="product-price">$120 <span>/roll</span></div><div class="product-stock">Stock: 200</div></div>
+        </div>
+        <div style="padding:0 20px 20px;">
+          <button class="add-to-cart" onclick="addToCart(this)">🛒 Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="Bags" data-name="kraft paper bags"
+           data-id="bags" data-price="5" data-unit="/pc" data-img="img-bags">
+        <div class="product-img-fixed img-bags" onclick="openDetail('bags')" style="cursor:pointer;"></div>
+        <div class="product-body" onclick="openDetail('bags')" style="cursor:pointer;padding-bottom:8px;">
+          <span class="product-tag">Bags</span>
+          <div class="product-name">Kraft Paper Bags</div>
+          <div class="product-desc">Eco-friendly kraft paper bags with handles, strong and durable</div>
+          <div class="product-footer"><div class="product-price">$5 <span>/pc</span></div><div class="product-stock">Stock: 1000</div></div>
+        </div>
+        <div style="padding:0 20px 20px;">
+          <button class="add-to-cart" onclick="addToCart(this)">🛒 Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="Eco-Friendly" data-name="eco-friendly packaging"
+           data-id="eco" data-price="35" data-unit="/pc" data-img="img-eco">
+        <div class="product-img-fixed img-eco" onclick="openDetail('eco')" style="cursor:pointer;"></div>
+        <div class="product-body" onclick="openDetail('eco')" style="cursor:pointer;padding-bottom:8px;">
+          <span class="product-tag">Eco-Friendly</span>
+          <div class="product-name">Eco-Friendly Packaging</div>
+          <div class="product-desc">Biodegradable packaging made from recycled materials, environmentally conscious choice</div>
+          <div class="product-footer"><div class="product-price">$35 <span>/pc</span></div><div class="product-stock">Stock: 150</div></div>
+        </div>
+        <div style="padding:0 20px 20px;">
+          <button class="add-to-cart" onclick="addToCart(this)">🛒 Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="Protective Materials" data-name="clear plastic containers"
+           data-id="cont" data-price="25" data-unit="/pc" data-img="img-cont">
+        <div class="product-img-fixed img-cont" onclick="openDetail('cont')" style="cursor:pointer;"></div>
+        <div class="product-body" onclick="openDetail('cont')" style="cursor:pointer;padding-bottom:8px;">
+          <span class="product-tag">Protective Materials</span>
+          <div class="product-name">Clear Plastic Containers</div>
+          <div class="product-desc">Transparent plastic containers for display and protection of products</div>
+          <div class="product-footer"><div class="product-price">$25 <span>/pc</span></div><div class="product-stock">Stock: 300</div></div>
+        </div>
+        <div style="padding:0 20px 20px;">
+          <button class="add-to-cart" onclick="addToCart(this)">🛒 Add to Cart</button>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="Boxes" data-name="corrugated box size b"
+           data-id="box-b" data-price="22" data-unit="/pc" data-img="img-box-b">
+        <div class="product-img-fixed img-box-b" onclick="openDetail('box-b')" style="cursor:pointer;"></div>
+        <div class="product-body" onclick="openDetail('box-b')" style="cursor:pointer;padding-bottom:8px;">
+          <span class="product-tag">Boxes</span>
+          <div class="product-name">Corrugated Box Size B</div>
+          <div class="product-desc">5-ply heavy-duty corrugated box, ideal for heavy or fragile items</div>
+          <div class="product-footer"><div class="product-price">$22 <span>/pc</span></div><div class="product-stock">Stock: 320</div></div>
+        </div>
+        <div style="padding:0 20px 20px;">
+          <button class="add-to-cart" onclick="addToCart(this)">🛒 Add to Cart</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="logo" onclick="showPage('home')"><svg width="26" height="26" viewBox="0 0 40 40" fill="none"><path d="M20 6L34 14V26L20 34L6 26V14L20 6Z" stroke="#ff69b4" stroke-width="2.5" fill="none"/><path d="M20 6L20 34M6 14L34 14M6 26L34 26" stroke="#ff69b4" stroke-width="1.5" opacity="0.4"/></svg> Tee Ouan Packaging</span>
+        <p>Quality packaging supplier with diverse products, affordable prices, and express delivery service</p>
+      </div>
+      <div class="footer-col"><h4>Contact Us</h4><p>Phone: 0814800003<br>Email: info@teeouanpackaging.com<br>LINE: @teeouanpack</p></div>
+      <div class="footer-col"><h4>Business Hours</h4><p>Mon - Sat: 7:00 AM - 7:00 PM<br>Sun: 7:00 AM - 5:30 PM</p></div>
+    </div>
+    <div class="footer-bottom">© 2026 Tee Ouan Packaging — All rights reserved</div>
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════════
+     PRODUCT DETAIL PAGE (要求1)
+════════════════════════════════════════ -->
+<div id="page-detail" class="page">
+  <div class="detail-page-inner">
+    <button class="detail-back" onclick="showPage('products')">← Back to Products</button>
+
+    <div class="detail-layout">
+      <!-- Image slider -->
+      <div>
+        <div class="detail-slider">
+          <div class="detail-slides-wrap">
+            <div class="detail-slides" id="detailSlides"></div>
+          </div>
+          <button class="detail-arrow prev" onclick="slideDetail(-1)">‹</button>
+          <button class="detail-arrow next" onclick="slideDetail(1)">›</button>
+        </div>
+        <div class="detail-dots" id="detailDots"></div>
+        <div class="detail-thumbs" id="detailThumbs"></div>
+      </div>
+
+      <!-- Product info -->
+      <div class="detail-info">
+        <span class="detail-tag" id="detailTag"></span>
+        <div class="detail-name" id="detailName"></div>
+        <div class="detail-price-row">
+          <span class="detail-price" id="detailPrice"></span>
+          <span class="detail-unit" id="detailUnit"></span>
+        </div>
+        <div class="detail-stock-badge" id="detailStock">
+          <span>✅</span><span></span>
+        </div>
+        <div class="detail-desc" id="detailDesc"></div>
+
+        <!-- Specs -->
+        <div class="detail-specs">
+          <h4>📋 Product Details</h4>
+          <div id="detailSpecs"></div>
+        </div>
+
+        <!-- Order row: qty + Add to Cart -->
+        <div class="detail-order-row">
+          <div class="detail-qty-wrap">
+            <button class="qty-btn" onclick="detailQtyChange(-1)">−</button>
+            <span class="qty-num" id="detailQtyNum">1</span>
+            <button class="qty-btn" onclick="detailQtyChange(1)">+</button>
+          </div>
+          <button class="detail-add-btn" id="detailAddBtn" onclick="detailAddToCart()">
+            🛒 Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Customer reviews -->
+    <div class="detail-reviews">
+      <h3>⭐ Customer Reviews</h3>
+      <div class="review-summary" id="reviewSummary"></div>
+      <div id="reviewList"></div>
+
+      <!-- ── Write a review form ── -->
+      <div class="review-form-wrap">
+        <h4>✏️ Write a Review</h4>
+
+        <!-- Star rating picker -->
+        <div class="star-picker" id="starPicker">
+          <input type="radio" name="reviewStar" id="s5" value="5"/>
+          <label for="s5" title="5 stars">★</label>
+          <input type="radio" name="reviewStar" id="s4" value="4"/>
+          <label for="s4" title="4 stars">★</label>
+          <input type="radio" name="reviewStar" id="s3" value="3"/>
+          <label for="s3" title="3 stars">★</label>
+          <input type="radio" name="reviewStar" id="s2" value="2"/>
+          <label for="s2" title="2 stars">★</label>
+          <input type="radio" name="reviewStar" id="s1" value="1"/>
+          <label for="s1" title="1 star">★</label>
+        </div>
+        <div class="star-hint" id="starHint">Tap a star to rate</div>
+
+        <div class="review-name-row">
+          <input type="text" class="review-input" id="reviewAuthor" placeholder="Your name (required)"/>
+          <input type="text" class="review-input" id="reviewTitle" placeholder="Review title (optional)"/>
+        </div>
+        <textarea class="review-textarea" id="reviewText" placeholder="Share your experience with this product…"></textarea>
+        <div class="review-err" id="reviewErr"></div>
+
+        <button class="review-submit" onclick="submitReview()">Post Review</button>
+        <div class="review-success" id="reviewSuccess">✅ Thank you! Your review has been posted.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="logo" onclick="showPage('home')"><svg width="26" height="26" viewBox="0 0 40 40" fill="none"><path d="M20 6L34 14V26L20 34L6 26V14L20 6Z" stroke="#ff69b4" stroke-width="2.5" fill="none"/><path d="M20 6L20 34M6 14L34 14M6 26L34 26" stroke="#ff69b4" stroke-width="1.5" opacity="0.4"/></svg> Tee Ouan Packaging</span>
+        <p>Quality packaging supplier with diverse products, affordable prices, and express delivery service</p>
+      </div>
+      <div class="footer-col"><h4>Contact Us</h4><p>Phone: 0814800003<br>Email: info@teeouanpackaging.com<br>LINE: @teeouanpack</p></div>
+      <div class="footer-col"><h4>Business Hours</h4><p>Mon - Sat: 7:00 AM - 7:00 PM<br>Sun: 7:00 AM - 5:30 PM</p></div>
+    </div>
+    <div class="footer-bottom">© 2026 Tee Ouan Packaging — All rights reserved</div>
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════════
+     ORDERS (CART) PAGE  — 要求1〜4
+════════════════════════════════════════ -->
+<div id="page-orders" class="page">
+  <section class="orders-hero">
+    <h1>🛒 My Orders</h1>
+    <p>Items you've added — adjust quantities and pay when ready.</p>
+  </section>
+
+  <div class="cart-section">
+    <div class="cart-inner">
+      <!-- Cart items rendered by JS -->
+      <div id="cartItemsContainer"></div>
+
+      <!-- Summary + Pay Now button (要求4) -->
+      <div id="cartSummaryBox" style="display:none;">
+        <div class="cart-summary">
+          <div class="summary-row"><span>Subtotal</span><span id="summarySubtotal">$0</span></div>
+          <div class="summary-row grand">
+            <span>Total</span>
+            <span class="grand-amount" id="summaryTotal">$0</span>
+          </div>
+          <!-- 要求4: Pay Now ボタン -->
+          <button class="btn-paynow" onclick="openCheckout()">
+            💳 Pay Now
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="logo" onclick="showPage('home')"><svg width="26" height="26" viewBox="0 0 40 40" fill="none"><path d="M20 6L34 14V26L20 34L6 26V14L20 6Z" stroke="#ff69b4" stroke-width="2.5" fill="none"/><path d="M20 6L20 34M6 14L34 14M6 26L34 26" stroke="#ff69b4" stroke-width="1.5" opacity="0.4"/></svg> Tee Ouan Packaging</span>
+        <p>Quality packaging supplier with diverse products, affordable prices, and express delivery service</p>
+      </div>
+      <div class="footer-col"><h4>Contact Us</h4><p>Phone: 0814800003<br>Email: info@teeouanpackaging.com<br>LINE: @teeouanpack</p></div>
+      <div class="footer-col"><h4>Business Hours</h4><p>Mon - Sat: 7:00 AM - 7:00 PM<br>Sun: 7:00 AM - 5:30 PM</p></div>
+    </div>
+    <div class="footer-bottom">© 2026 Tee Ouan Packaging — All rights reserved</div>
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════════
+     ABOUT PAGE
+════════════════════════════════════════ -->
+<div id="page-about" class="page">
+  <section class="values-section">
+    <h2>Our Values</h2>
+    <div class="values-grid">
+      <div class="value-card"><div class="value-icon">🎯</div><h3>Customer Focused</h3><p>We listen and understand customer needs to deliver the best solutions</p></div>
+      <div class="value-card"><div class="value-icon">🏅</div><h3>Premium Quality</h3><p>Every product undergoes strict quality selection and inspection</p></div>
+      <div class="value-card"><div class="value-icon">👥</div><h3>Professional Team</h3><p>Knowledgeable and experienced team ready to consult and serve</p></div>
+    </div>
+  </section>
+
+  <section class="services-section">
+    <h2>Our Services</h2>
+    <div class="services-card">
+      <div class="services-grid">
+        <div class="service-item"><div class="service-icon si-pink">📦</div><div class="service-text"><h4>Wide Product Range</h4><p>All types of packaging from boxes, bags, films to protective materials</p></div></div>
+        <div class="service-item"><div class="service-icon si-teal">🏅</div><div class="service-text"><h4>Free Consultation</h4><p>Advice on choosing the right packaging for your business</p></div></div>
+        <div class="service-item"><div class="service-icon si-green">👥</div><div class="service-text"><h4>Custom Design</h4><p>Design and produce custom packaging with logo printing</p></div></div>
+        <div class="service-item"><div class="service-icon si-purple">⏰</div><div class="service-text"><h4>Express Delivery Nationwide</h4><p>Fast delivery service covering all areas across the country</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact-section">
+    <div class="contact-gradient">
+      <h2>Contact Us</h2>
+      <p>Ready to serve and answer your questions</p>
+      <div class="contact-info-grid">
+        <div class="contact-item">
+          <div class="contact-icon ci-pink">📞</div>
+          <div><h4>Phone</h4><p>081-480-003<br>094-530-6500</p></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon ci-purple">⏰</div>
+          <div><h4>Business Hours</h4>
+            <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:0.87rem;color:var(--text-muted);">
+              <span>Mon - Sat:</span><span>7:00 AM - 7:00 PM</span>
+              <span>Sun:</span><span>7:00 AM - 5:30 PM</span>
+            </div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon ci-green">📍</div>
+          <div>
+            <h4>Address</h4>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3826.546338371279!2d102.8425778!3d16.447851!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31228b000c297601%3A0x42eebb925a431975!2z4LiV4Li14LmL4Lit4LmJ4Lin4LiZ4Lia4Lij4Lij4LiI4Li44Lig4Lix4LiT4LiR4LmMICjguYDguJrguKXguKXguYwpIOC4quC4suC4guC4suC4guC4reC4meC5geC4geC5iOC4mQ!5e0!3m2!1sja!2sth!4v1778165563895!5m2!1sja!2sth"
+              width="100%" height="220" style="border:0;border-radius:16px;margin-top:10px;margin-bottom:8px;"
+              allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <p>123/45 Rama 4 Road<br>Khlong Toei, Bangkok 10110</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon ci-teal">✉️</div>
+          <div><h4>Email</h4><p>info@teeouanpackaging.com<br>sales@teeouanpackaging.com</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="logo" onclick="showPage('home')"><svg width="26" height="26" viewBox="0 0 40 40" fill="none"><path d="M20 6L34 14V26L20 34L6 26V14L20 6Z" stroke="#ff69b4" stroke-width="2.5" fill="none"/><path d="M20 6L20 34M6 14L34 14M6 26L34 26" stroke="#ff69b4" stroke-width="1.5" opacity="0.4"/></svg> Tee Ouan Packaging</span>
+        <p>Quality packaging supplier with diverse products, affordable prices, and express delivery service</p>
+      </div>
+      <div class="footer-col"><h4>Contact Us</h4><p>Phone: 0814800003<br>Email: info@teeouanpackaging.com<br>LINE: @teeouanpack</p></div>
+      <div class="footer-col"><h4>Business Hours</h4><p>Mon - Sat: 7:00 AM - 7:00 PM<br>Sun: 7:00 AM - 5:30 PM</p></div>
+    </div>
+    <div class="footer-bottom">© 2026 Tee Ouan Packaging — All rights reserved</div>
+  </footer>
+</div>
+
+<div class="help-bubble" title="Help">?</div>
+
+<!-- ════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════ -->
+<script>
+/* ─── CART STATE ─────────────────────────── */
+// cart = [{id, name, price, unit, imgClass, qty}, …]
+let cart = [];
+let selectedPayMethod = '';
+
+/* ─── ADD TO CART (要求1) ─── */
+function addToCart(btn) {
+  const card = btn.closest('.product-card');
+  const id       = card.dataset.id;
+  const name     = card.querySelector('.product-name').textContent.trim();
+  const price    = parseFloat(card.dataset.price);
+  const unit     = card.dataset.unit;
+  const imgClass = card.dataset.img;
+
+  const existing = cart.find(i => i.id === id);
+  if (existing) {
+    existing.qty++;
+  } else {
+    cart.push({ id, name, price, unit, imgClass, qty: 1 });
+  }
+
+  // Visual feedback
+  const orig = btn.innerHTML;
+  btn.innerHTML = '✅ Added!';
+  btn.classList.add('added');
+  setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('added'); }, 1300);
+
+  updateBadge();
+  renderCart();
+}
+
+/* ─── CHANGE QTY (要求2) ─── */
+function changeQty(id, delta) {
+  const item = cart.find(i => i.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) {
+    cart = cart.filter(i => i.id !== id);
+  }
+  updateBadge();
+  renderCart();
+}
+
+/* ─── REMOVE ITEM (要求2) ─── */
+function removeItem(id) {
+  cart = cart.filter(i => i.id !== id);
+  updateBadge();
+  renderCart();
+}
+
+/* ─── BADGE ─── */
+function updateBadge() {
+  const total = cart.reduce((s, i) => s + i.qty, 0);
+  const badge = document.getElementById('cartBadge');
+  badge.style.display = total > 0 ? 'inline-flex' : 'none';
+  badge.textContent   = total > 99 ? '99+' : total;
+}
+
+/* ─── RENDER CART (要求2・3) ─── */
+function renderCart() {
+  const container = document.getElementById('cartItemsContainer');
+  const summaryBox = document.getElementById('cartSummaryBox');
+
+  if (cart.length === 0) {
+    container.innerHTML = `
+      <div class="cart-empty">
+        <div class="cart-empty-icon">🛒</div>
+        <p>Your cart is empty.<br>Add items from the Products page!</p>
+        <button class="btn-primary" onclick="showPage('products')">Browse Products</button>
+      </div>`;
+    summaryBox.style.display = 'none';
+    return;
+  }
+
+  let html = '';
+  let subtotal = 0;
+
+  cart.forEach(item => {
+    const lineTotal = item.price * item.qty;
+    subtotal += lineTotal;
+    // 要求2: マイナス・プラスボタン + 削除ボタン
+    // 要求3: カート内に商品画像を表示（imgClassをそのまま使用）
+    html += `
+      <div class="cart-item">
+        <div class="cart-thumb ${item.imgClass}"></div>
+        <div class="cart-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-unit">$${item.price}${item.unit}</div>
+        </div>
+        <div class="qty-wrap">
+          <button class="qty-btn" onclick="changeQty('${item.id}',-1)" title="Decrease">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty('${item.id}',1)" title="Increase">+</button>
+        </div>
+        <div class="cart-line-price">$${lineTotal.toLocaleString()}</div>
+        <button class="cart-del" onclick="removeItem('${item.id}')" title="Remove item">🗑</button>
+      </div>`;
+  });
+
+  container.innerHTML = html;
+
+  document.getElementById('summarySubtotal').textContent = '$' + subtotal.toLocaleString();
+  document.getElementById('summaryTotal').textContent    = '$' + subtotal.toLocaleString();
+  summaryBox.style.display = 'block';
+}
+
+/* ─── CLEAR CART ─── */
+function clearCart() {
+  cart = [];
+  selectedPayMethod = '';
+  updateBadge();
+  renderCart();
+  showPage('home');
+}
+
+/* ─── CHECKOUT (要求5) ─── */
+function openCheckout() {
+  if (cart.length === 0) return;
+
+  // Build checkout item list
+  let html = '';
+  let total = 0;
+  cart.forEach(item => {
+    const line = item.price * item.qty;
+    total += line;
+    html += `
+      <div class="co-row">
+        <div class="co-thumb ${item.imgClass}"></div>
+        <div class="co-detail">
+          <strong>${item.name}</strong>
+          <span>x ${item.qty} (${item.unit})</span>
+        </div>
+        <div class="co-price">$${line.toLocaleString()}</div>
+      </div>`;
+  });
+  document.getElementById('coItems').innerHTML = html;
+  document.getElementById('coTotal').innerHTML =
+    `<span>Total</span><span>$${total.toLocaleString()}</span>`;
+
+  // Pre-fill from account
+  const acc = loadAccount();
+  if (acc.name)    document.getElementById('co-name').value    = acc.name;
+  if (acc.phone)   document.getElementById('co-phone').value   = acc.phone;
+  if (acc.address) document.getElementById('co-address').value = acc.address;
+  if (acc.payment) { selectPay(acc.payment); }
+
+  openModal('modalCheckout');
+}
+
+function selectPay(method) {
+  selectedPayMethod = method;
+  ['bank','promptpay','cod','card'].forEach(m => {
+    document.getElementById('pay-' + m).classList.toggle('selected', m === method);
+  });
+}
+
+function confirmOrder() {
+  const name    = document.getElementById('co-name').value.trim();
+  const phone   = document.getElementById('co-phone').value.trim();
+  const address = document.getElementById('co-address').value.trim();
+
+  if (!selectedPayMethod) { alert('Please select a payment method.'); return; }
+  if (!name)    { alert('Please enter recipient name.'); return; }
+  if (!phone)   { alert('Please enter phone number.'); return; }
+  if (!address) { alert('Please enter delivery address.'); return; }
+
+  closeModal('modalCheckout');
+  openModal('modalConfirmed');
+}
+
+/* ─── ACCOUNT (要求6) ─── */
+const ACC_KEY = 'teeouanAcc';
+
+function loadAccount() {
+  try { return JSON.parse(localStorage.getItem(ACC_KEY) || '{}'); }
+  catch { return {}; }
+}
+function saveAccountData(data) {
+  localStorage.setItem(ACC_KEY, JSON.stringify(data));
+}
+
+function openAccountModal() {
+  // Always start locked
+  document.getElementById('accLockScreen').style.display = 'block';
+  document.getElementById('accFormScreen').style.display = 'none';
+  document.getElementById('passInput').value = '';
+  document.getElementById('passErr').textContent = '';
+  openModal('modalAccount');
+}
+
+function checkPass() {
+  const entered = document.getElementById('passInput').value;
+  const acc = loadAccount();
+  const stored = acc.password || '1234'; // default password
+
+  if (entered === stored) {
+    // Show form, load data
+    document.getElementById('accLockScreen').style.display = 'none';
+    document.getElementById('accFormScreen').style.display = 'block';
+    document.getElementById('acc-name').value    = acc.name    || '';
+    document.getElementById('acc-shop').value    = acc.shop    || '';
+    document.getElementById('acc-email').value   = acc.email   || '';
+    document.getElementById('acc-phone').value   = acc.phone   || '';
+    document.getElementById('acc-address').value = acc.address || '';
+    document.getElementById('acc-payment').value = acc.payment || '';
+    document.getElementById('acc-newpass').value = '';
+    document.getElementById('accToast').style.display = 'none';
+    document.getElementById('passErr').textContent = '';
+  } else {
+    document.getElementById('passErr').textContent = '❌ Incorrect password. Please try again.';
+  }
+}
+
+function saveAccount() {
+  const acc = loadAccount();
+  const newPass = document.getElementById('acc-newpass').value;
+  const data = {
+    name:     document.getElementById('acc-name').value.trim(),
+    shop:     document.getElementById('acc-shop').value.trim(),
+    email:    document.getElementById('acc-email').value.trim(),
+    phone:    document.getElementById('acc-phone').value.trim(),
+    address:  document.getElementById('acc-address').value.trim(),
+    payment:  document.getElementById('acc-payment').value,
+    password: newPass ? newPass : (acc.password || '1234'),
+  };
+  saveAccountData(data);
+  const toast = document.getElementById('accToast');
+  toast.style.display = 'block';
+  setTimeout(() => { toast.style.display = 'none'; }, 2500);
+}
+
+function lockAccount() {
+  document.getElementById('accLockScreen').style.display = 'block';
+  document.getElementById('accFormScreen').style.display = 'none';
+  document.getElementById('passInput').value = '';
+  document.getElementById('passErr').textContent = '';
+}
+
+/* ─── MODAL HELPERS ─── */
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  // Only restore scroll if no other modal open
+  if (!document.querySelector('.modal-overlay.open')) {
+    document.body.style.overflow = '';
+  }
+}
+// Close on backdrop click
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => {
+    if (e.target === el) closeModal(el.id);
+  });
+});
+
+/* ─── NAV ─── */
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('open');
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('navOverlay').classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('navLinks').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('navOverlay').classList.remove('open');
+}
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  const navEl = document.getElementById('nav-' + page);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo(0, 0);
+  closeMenu();
+  if (page === 'orders') renderCart();
+}
+
+/* ─── PRODUCT FILTER ─── */
+function filterCategory(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#productsGrid .product-card').forEach(card => {
+    card.style.display = (cat === 'All' || card.dataset.category === cat) ? '' : 'none';
+  });
+}
+function filterProducts() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('#productsGrid .product-card').forEach(card => {
+    card.style.display = card.dataset.name.includes(q) ? '' : 'none';
+  });
+}
+
+/* ─── PRODUCT DATA (要求1) ─── */
+const PRODUCTS = {
+  'box-a': {
+    id: 'box-a', name: 'Corrugated Box Size A', tag: 'Boxes',
+    price: 15, unit: '/pc', imgClass: 'img-box-a', stock: 500,
+    images: ['photoo/sizeA.JPG', 'photoo/sizeA.JPG', 'photoo/sizeA.JPG'],
+    desc: '3-ply corrugated cardboard box, strong and durable, suitable for general packaging. Ideal for light to medium-weight products. Available in bulk.',
+    specs: [
+      { k: 'Material',    v: '3-ply Corrugated Cardboard' },
+      { k: 'Dimensions',  v: '30 × 20 × 15 cm' },
+      { k: 'Max Load',    v: '10 kg' },
+      { k: 'MOQ',         v: '50 pcs' },
+      { k: 'Color',       v: 'Natural Brown' },
+    ],
+    reviews: [
+    ],
+  },
+  'bubble': {
+    id: 'bubble', name: 'Bubble Wrap', tag: 'Protective Materials',
+    price: 120, unit: '/roll', imgClass: 'img-bubble', stock: 200,
+    images: ['photoo/Bubble Wrap.JPG', 'photoo/Bubble Wrap.JPG'],
+    desc: 'Large-bubble wrap roll for excellent shock absorption. Prevents product damage during shipping and storage. Ready to use right out of the box.',
+    specs: [
+      { k: 'Roll Size',   v: '50 cm × 50 m' },
+      { k: 'Bubble Size', v: '10 mm diameter' },
+      { k: 'Thickness',   v: '30 micron' },
+      { k: 'Material',    v: 'LDPE Plastic' },
+      { k: 'MOQ',         v: '1 roll' },
+    ],
+    reviews: [
+    ],
+  },
+  'bags': {
+    id: 'bags', name: 'Kraft Paper Bags', tag: 'Bags',
+    price: 5, unit: '/pc', imgClass: 'img-bags', stock: 1000,
+    images: ['photoo/IMG_3754.JPG', 'photoo/IMG_3754.JPG'],
+    desc: 'Eco-friendly kraft paper bags with sturdy handles. Made from recycled paper, biodegradable and strong. Perfect for retail and gifting.',
+    specs: [
+      { k: 'Material',   v: 'Recycled Kraft Paper' },
+      { k: 'Size',       v: '25 × 35 × 10 cm' },
+      { k: 'Handle',     v: 'Twisted Paper Handle' },
+      { k: 'Max Load',   v: '5 kg' },
+      { k: 'MOQ',        v: '100 pcs' },
+    ],
+    reviews: [
+    ],
+  },
+  'eco': {
+    id: 'eco', name: 'Eco-Friendly Packaging', tag: 'Eco-Friendly',
+    price: 35, unit: '/pc', imgClass: 'img-eco', stock: 150,
+    images: ['photoo/IMG_3755.JPG', 'photoo/IMG_3755.JPG'],
+    desc: 'Biodegradable packaging made from 100% recycled and renewable materials. Reduces environmental impact without compromising on protection.',
+    specs: [
+      { k: 'Material',     v: 'Recycled & Compostable' },
+      { k: 'Certification', v: 'ISO 14001' },
+      { k: 'Decompose',    v: '6–12 months' },
+      { k: 'MOQ',          v: '20 pcs' },
+    ],
+    reviews: [
+    ],
+  },
+  'cont': {
+    id: 'cont', name: 'Clear Plastic Containers', tag: 'Protective Materials',
+    price: 25, unit: '/pc', imgClass: 'img-cont', stock: 300,
+    images: ['photoo/IMG_3757.JPG', 'photoo/IMG_3757.JPG'],
+    desc: 'Crystal-clear plastic containers perfect for display and product protection. Secure lid keeps contents safe. Stackable design for easy storage.',
+    specs: [
+      { k: 'Material',    v: 'PET Plastic' },
+      { k: 'Capacity',    v: '1 Litre' },
+      { k: 'Lid',         v: 'Snap-lock' },
+      { k: 'Stackable',   v: 'Yes' },
+      { k: 'MOQ',         v: '10 pcs' },
+    ],
+    reviews: [
+    ],
+  },
+  'box-b': {
+    id: 'box-b', name: 'Corrugated Box Size B', tag: 'Boxes',
+    price: 22, unit: '/pc', imgClass: 'img-box-b', stock: 320,
+    images: ['photoo/sizeB.JPG', 'photoo/sizeB.JPG'],
+    desc: '5-ply heavy-duty corrugated cardboard box. Built for heavy and fragile items. Superior stacking strength and impact resistance.',
+    specs: [
+      { k: 'Material',    v: '5-ply Corrugated Cardboard' },
+      { k: 'Dimensions',  v: '40 × 30 × 25 cm' },
+      { k: 'Max Load',    v: '25 kg' },
+      { k: 'MOQ',         v: '20 pcs' },
+      { k: 'Color',       v: 'Natural Brown' },
+    ],
+    reviews: [
+    ],
+  },
+  'plastic-cup': {
+    id: 'plastic-cup', name: 'Clear Plastic Cups', tag: 'Eco-Friendly', // 既存のタグ（Boxes, Bags, Eco-friendly, Containers）のいずれかを指定
+    price: 3, unit: '/pack', imgClass: 'img-cup', // CSSで背景画像を指定する場合のクラス名 
+    stock: 800,
+    images: ['photoo/cup1.JPG'], // スワイプ表示させたい画像や動画のパス
+    desc: 'High-quality clear plastic cups perfect for cold beverages, smoothies, and iced coffee.',
+    specs: [
+      { k: 'Material', v: 'PET Plastic' },
+      { k: 'Capacity', v: '16 oz' },
+      { k: 'Quantity', v: '50 pcs/pack' }
+    ],
+    reviews: [
+    ]
+    },
+  'plastic-dish': {
+    id: 'plastic-dish', name: 'Clear Plastic Dish', tag: 'Eco-Friendly', // 既存のタグ（Boxes, Bags, Eco-friendly, Containers）のいずれかを指定
+    price: 3, unit: '/pack', imgClass: 'img-cup', // CSSで背景画像を指定する場合のクラス名
+    stock: 800,
+    images: ['photoo/cup2.JPG', 'photoo/IMG_3729.JPG', 'photoo/IMG_3730.JPG', 'photoo/IMG_3731.JPG', 'photoo/IMG_3732.JPG', 'photoo/IMG_3759.MOV', 'photoo/IMG_3760.MOV'], // スワイプ表示させたい画像や動画のパス
+    desc: 'High-quality clear plastic cups perfect for cold beverages, smoothies, and iced coffee.',
+    specs: [
+      { k: 'Material', v: 'PET Plastic' },
+      { k: 'Capacity', v: '16 oz' },
+      { k: 'Quantity', v: '50 pcs/pack' }
+    ],
+    reviews: [
+    ]
+  },
+};
+
+/* ─── DETAIL STATE ─── */
+let detailCurrentSlide = 0;
+let detailProductId    = null;
+let detailQty          = 1;
+
+function openDetail(id) {
+  const p = PRODUCTS[id];
+  if (!p) return;
+  detailProductId    = id;
+  detailCurrentSlide = 0;
+  detailQty          = 1;
+
+  // Tag / name / price
+  document.getElementById('detailTag').textContent  = p.tag;
+  document.getElementById('detailName').textContent = p.name;
+  document.getElementById('detailPrice').textContent = '$' + p.price;
+  document.getElementById('detailUnit').textContent  = p.unit;
+  document.getElementById('detailStock').innerHTML =
+    `<span>✅</span><span>In Stock (${p.stock} available)</span>`;
+  document.getElementById('detailDesc').textContent = p.desc;
+  document.getElementById('detailQtyNum').textContent = '1';
+
+  // Specs
+  let specHtml = '';
+  p.specs.forEach(s => {
+    specHtml += `<div class="spec-row"><span class="spec-key">${s.k}</span><span class="spec-val">${s.v}</span></div>`;
+  });
+  document.getElementById('detailSpecs').innerHTML = specHtml;
+
+  // Slides
+  const slidesEl = document.getElementById('detailSlides');
+  const dotsEl   = document.getElementById('detailDots');
+  const thumbsEl = document.getElementById('detailThumbs');
+  slidesEl.innerHTML = '';
+  dotsEl.innerHTML   = '';
+  thumbsEl.innerHTML = '';
+
+  p.images.forEach((src, i) => {
+    // slide
+    const s = document.createElement('div');
+    s.className = 'detail-slide';
+    s.style.backgroundImage = `url('${src}')`;
+    slidesEl.appendChild(s);
+    // dot
+    const d = document.createElement('div');
+    d.className = 'detail-dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goToSlide(i);
+    dotsEl.appendChild(d);
+    // thumb
+    const t = document.createElement('div');
+    t.className = 'detail-thumb' + (i === 0 ? ' active' : '');
+    t.style.backgroundImage = `url('${src}')`;
+    t.onclick = () => goToSlide(i);
+    thumbsEl.appendChild(t);
+  });
+
+  // Reviews — renderReviews handles both preset + localStorage reviews
+  renderReviews(p);
+
+  // Reset add button
+  const btn = document.getElementById('detailAddBtn');
+  btn.innerHTML = '🛒 Add to Cart';
+  btn.classList.remove('added');
+
+  showPage('detail');
+}
+
+function goToSlide(i) {
+  const p = PRODUCTS[detailProductId];
+  if (!p) return;
+  detailCurrentSlide = Math.max(0, Math.min(i, p.images.length - 1));
+  document.getElementById('detailSlides').style.transform =
+    `translateX(-${detailCurrentSlide * 100}%)`;
+  document.querySelectorAll('.detail-dot').forEach((d, idx) =>
+    d.classList.toggle('active', idx === detailCurrentSlide));
+  document.querySelectorAll('.detail-thumb').forEach((t, idx) =>
+    t.classList.toggle('active', idx === detailCurrentSlide));
+}
+
+function slideDetail(dir) {
+  const p = PRODUCTS[detailProductId];
+  if (!p) return;
+  goToSlide(detailCurrentSlide + dir);
+}
+
+// Touch/swipe support for detail slider
+let touchStartX = 0;
+document.addEventListener('touchstart', e => {
+  if (e.target.closest('.detail-slider')) touchStartX = e.touches[0].clientX;
+}, { passive: true });
+document.addEventListener('touchend', e => {
+  if (!e.target.closest('.detail-slider')) return;
+  const dx = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(dx) > 40) slideDetail(dx > 0 ? 1 : -1);
+});
+
+function detailQtyChange(delta) {
+  detailQty = Math.max(1, detailQty + delta);
+  document.getElementById('detailQtyNum').textContent = detailQty;
+}
+
+function detailAddToCart() {
+  const p = PRODUCTS[detailProductId];
+  if (!p) return;
+  const existing = cart.find(i => i.id === p.id);
+  if (existing) {
+    existing.qty += detailQty;
+  } else {
+    cart.push({ id: p.id, name: p.name, price: p.price, unit: p.unit, imgClass: p.imgClass, qty: detailQty });
+  }
+  updateBadge();
+  renderCart();
+  const btn = document.getElementById('detailAddBtn');
+  btn.innerHTML = `✅ Added (×${detailQty})!`;
+  btn.classList.add('added');
+  setTimeout(() => {
+    btn.innerHTML = '🛒 Add to Cart';
+    btn.classList.remove('added');
+  }, 1500);
+}
+
+/* ─── REVIEW FORM ─── */
+const STAR_LABELS = ['', '😕 Poor', '😐 Fair', '🙂 Good', '😊 Great', '🤩 Excellent!'];
+
+// Update hint text when a star is selected
+document.querySelectorAll('.star-picker input').forEach(input => {
+  input.addEventListener('change', () => {
+    const v = parseInt(input.value);
+    document.getElementById('starHint').textContent =
+      `${v} star${v > 1 ? 's' : ''} — ${STAR_LABELS[v]}`;
+  });
+});
+
+function submitReview() {
+  const author = document.getElementById('reviewAuthor').value.trim();
+  const text   = document.getElementById('reviewText').value.trim();
+  const errEl  = document.getElementById('reviewErr');
+  const starEl = document.querySelector('.star-picker input:checked');
+
+  // Validation
+  if (!starEl) { errEl.textContent = '⚠️ Please select a star rating.'; return; }
+  if (!author) { errEl.textContent = '⚠️ Please enter your name.'; return; }
+  if (!text)   { errEl.textContent = '⚠️ Please write a comment.'; return; }
+  errEl.textContent = '';
+
+  const rating = parseInt(starEl.value);
+  const title  = document.getElementById('reviewTitle').value.trim();
+  const now    = new Date();
+  const dateStr = now.toLocaleString('en-US', { month: 'short', year: 'numeric' });
+
+  // Persist to localStorage
+  const p = PRODUCTS[detailProductId];
+  if (!p) return;
+  const storageKey = 'reviews_' + detailProductId;
+  let stored = [];
+  try { stored = JSON.parse(localStorage.getItem(storageKey) || '[]'); } catch {}
+  const newReview = { name: author, title, rating, date: dateStr, text };
+  stored.unshift(newReview); // newest first
+  localStorage.setItem(storageKey, JSON.stringify(stored));
+
+  // Also push into PRODUCTS object so summary updates immediately
+  p.reviews.unshift(newReview);
+
+  // Re-render reviews
+  renderReviews(p);
+
+  // Reset form
+  document.getElementById('reviewAuthor').value = '';
+  document.getElementById('reviewTitle').value  = '';
+  document.getElementById('reviewText').value   = '';
+  document.querySelectorAll('.star-picker input').forEach(i => i.checked = false);
+  document.getElementById('starHint').textContent = 'Tap a star to rate';
+
+  // Show success
+  const ok = document.getElementById('reviewSuccess');
+  ok.style.display = 'block';
+  setTimeout(() => { ok.style.display = 'none'; }, 3000);
+}
+
+/* Separate render function so openDetail + submitReview both use it */
+function renderReviews(p) {
+  const stars = r => '⭐'.repeat(Math.round(r));
+
+  // Load any user-submitted reviews from localStorage
+  const storageKey = 'reviews_' + p.id;
+  let stored = [];
+  try { stored = JSON.parse(localStorage.getItem(storageKey) || '[]'); } catch {}
+
+  // Merge: stored reviews + original (de-dup by checking name+date+text combo)
+  const allReviews = [...stored];
+  p.reviews.forEach(r => {
+    const dup = stored.some(s => s.name === r.name && s.date === r.date && s.text === r.text);
+    if (!dup) allReviews.push(r);
+  });
+
+  // Summary
+  const avg = allReviews.length
+    ? (allReviews.reduce((s, r) => s + r.rating, 0) / allReviews.length).toFixed(1)
+    : '–';
+  document.getElementById('reviewSummary').innerHTML = `
+    <div class="review-avg">${avg}</div>
+    <div>
+      <div class="review-stars">${stars(parseFloat(avg) || 0)}</div>
+      <div class="review-count">${allReviews.length} review${allReviews.length !== 1 ? 's' : ''}</div>
+    </div>`;
+
+  // List
+  let html = '';
+  allReviews.forEach(r => {
+    const titleLine = r.title
+      ? `<div style="font-size:0.82rem;font-weight:700;color:var(--text);margin-bottom:4px;">"${r.title}"</div>`
+      : '';
+    html += `
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar">${r.name[0].toUpperCase()}</div>
+          <div class="review-meta">
+            <div class="review-name">${r.name}</div>
+            <div class="review-date">${r.date}</div>
+          </div>
+          <div class="review-stars-sm">${'⭐'.repeat(r.rating)}</div>
+        </div>
+        ${titleLine}
+        <div class="review-text">${r.text}</div>
+      </div>`;
+  });
+  document.getElementById('reviewList').innerHTML = html || '<p style="color:var(--text-muted);font-size:0.9rem;padding:12px 0;">No reviews yet. Be the first to review!</p>';
+}
+
+/* ─── INIT ─── */
+renderCart();
+</script>
+</body>
+</html>
